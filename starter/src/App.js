@@ -273,7 +273,7 @@ function App() {
             </div>
           </div>
           <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
+              <a aria-label="Search books" className="search_link" onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
           </div>
         </div>
       )}

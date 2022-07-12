@@ -32,6 +32,9 @@ body,
 .bookshelf {
   padding: 0 10px 20px;
 }
+a.search_link {
+  cursor: pointer;
+}
 
 @media (min-width: 600px) {
   .bookshelf {
@@ -57,7 +60,7 @@ body,
   height: 50px;
   border-radius: 50%;
   background: #2e7d32;
-  background-image: url("./icons/add.svg");
+  background-image: url("./icons/search.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 28px;
