@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAll, search } from "./BooksAPI"
+import { getAll, search, update } from "./BooksAPI"
 import Book from "./component/Book";
 
 function Search() {
 
 	const [books, setBooks] = useState([]);
+	const [bookshelf, setBookshelf] = useState({});
+
+	useEffect(() => {
+		let tempObj = {};
+		getAll().then(data => {
+			for (let book of data) {
+				tempObj[book.id] = book.shelf;
+			}
+			setBookshelf(tempObj);
+		})
+
+	}, []);
 
 	const setShelf = (selectionObj) => {
 		let chosenIndex = books.findIndex(el => el.id === selectionObj.id);
-		books[chosenIndex].shelf = selectionObj.shelf;
-		setBooks([...books]);
+		update(books[chosenIndex], selectionObj.shelf);
 	}
+
 
 	const processFilter = (userEntry) => {
 		let clean_entry = userEntry.trim();
@@ -22,7 +34,11 @@ function Search() {
 
 		search(clean_entry).then(data => {
 			if (!data.error) {
-				setBooks(data);
+				let shelfSorted = data.map(book => {
+					book.shelf = bookshelf[book.id] || 'none';
+					return book;
+				});
+				setBooks(shelfSorted);
 			} else {
 				setBooks([]);
 			}

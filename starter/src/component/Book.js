@@ -13,12 +13,12 @@ function Book({ book, setShelf }) {
 						width: 128,
 						height: 193,
 						backgroundImage:
-							`url("${book.imageLinks.thumbnail}")`,
+							`url("${book.imageLinks ? book.imageLinks.thumbnail : 'https://dummyimage.com/128x193/eee/000.jpg&text=Cover+Missing'}")`,
 					}}
 				></div>
 				<div className="book-shelf-changer">
 					<select defaultValue={book.shelf} onChange={(e) => { makeSelection({ 'shelf': e.target.value, 'id': book.id }) }}>
-						<option value="none" disabled>
+						<option value="null" disabled>
 							Move to...
 						</option>
 						<option value="currentlyReading">
