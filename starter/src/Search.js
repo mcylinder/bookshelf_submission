@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAll, search, update } from "./BooksAPI"
+import { getAll, search, update } from "./BooksAPI";
+import { DebounceInput } from 'react-debounce-input';
 import Book from "./component/Book";
 
 function Search() {
@@ -52,7 +53,9 @@ function Search() {
 				<div className="search-books-bar">
 					<Link className="close-search" to="/">Close</Link>
 					<div className="search-books-input-wrapper">
-						<input
+						<DebounceInput
+							minLength={2}
+							debounceTimeout={350}
 							onChange={(e) => processFilter(e.target.value)}
 							type="text"
 							placeholder="Search by title, author, or ISBN"
