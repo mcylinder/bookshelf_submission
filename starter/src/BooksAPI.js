@@ -1,3 +1,4 @@
+import legacyData from './legacy'
 const api = "https://reactnd-books-api.udacity.com";
 
 let token = localStorage.token;
@@ -17,7 +18,20 @@ export const get = (bookId) =>
 export const getAll = () =>
   fetch(`${api}/books`, { headers })
     .then((res) => res.json())
-    .then((data) => data.books);
+    .then((data) => {
+      let combineArrays = [...legacyData.legacyData, ...data.books];
+
+      let searchPrep = combineArrays.map(item => {
+        let title = item.title.toLowerCase();
+        let authors = item.authors.join(' ').toLowerCase();
+        let isbns = item.industryIdentifiers || [];
+        let isbnCompiled = isbns.map(isbn => isbn.identifier).join(' ');
+
+        item['search_fld'] = `${title} ${authors} ${isbnCompiled}`;
+        return item;
+      })
+      return searchPrep;
+    });
 
 export const update = (book, shelf) =>
   fetch(`${api}/books/${book.id}`, {
