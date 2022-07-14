@@ -1,52 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAll } from "./BooksAPI"
+import { getAll, search } from "./BooksAPI"
 import Book from "./component/Book";
 
 function Search() {
 
-
-
-	const [bookCollection, setBookCollection] = useState([]);//maintain unfiltered set
 	const [books, setBooks] = useState([]);
 
-
-	useEffect(() => {
-		getAll().then(data => {
-			setBookCollection(data);
-			setBooks(data);
-		})
-
-	}, []);
-
-
-	useEffect(() => {
-		setBooks(bookCollection)
-	}, []);
-
 	const setShelf = (selectionObj) => {
-		let chosenIndex = bookCollection.findIndex(el => el.id === selectionObj.id);
-		bookCollection[chosenIndex].shelf = selectionObj.shelf;
-		setBookCollection([...bookCollection]);
+		let chosenIndex = books.findIndex(el => el.id === selectionObj.id);
+		books[chosenIndex].shelf = selectionObj.shelf;
+		setBooks([...books]);
 	}
 
 	const processFilter = (userEntry) => {
-		//checking for ALL match
-		let fltrs = userEntry.split(' ').filter(el => el !== '');
+		let clean_entry = userEntry.trim();
+		if (clean_entry === '') {
+			setBooks([]);
+			return;
+		}
 
-		let filteredBookCollection = [];
-		filteredBookCollection = bookCollection.filter(el => {
-			let instanceCount = 0;
-			for (let flt of fltrs) {
-				if (el.search_fld.indexOf(flt.trim()) !== -1) {
-					instanceCount++;
-				}
+		search(clean_entry).then(data => {
+			if (!data.error) {
+				setBooks(data);
+			} else {
+				setBooks([]);
 			}
-
-			return instanceCount === fltrs.length;
-		});
-
-		setBooks(filteredBookCollection);
+		})
 	}
 
 	return (

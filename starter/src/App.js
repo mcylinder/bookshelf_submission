@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { getAll } from "./BooksAPI"
+import { getAll, update } from "./BooksAPI"
 
 import Shelf from "./component/Shelf"
 import React from "react";
@@ -19,6 +19,7 @@ function App() {
 
   const setShelf = (selectionObj) => {
     let chosenIndex = bookCollection.findIndex(el => el.id === selectionObj.id);
+    update(bookCollection[chosenIndex], selectionObj.shelf);
     bookCollection[chosenIndex].shelf = selectionObj.shelf;
     setBookCollection([...bookCollection]);
   }
